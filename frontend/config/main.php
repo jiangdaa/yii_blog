@@ -10,9 +10,15 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'defaultRoute'=>'index/index',
+    'defaultRoute' => 'index/index',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        'Prompt' => [
+            'class' => 'common\components\Prompt'
+        ],
+        'Gather' => [
+            'class' => 'common\components\Gather'
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
@@ -37,14 +43,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'error/error',
         ],
-       
-       'urlManager' => [
+
+        'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        
+
     ],
     'params' => $params,
 ];

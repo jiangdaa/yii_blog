@@ -1,10 +1,37 @@
 <?php
+
 namespace backend\controllers;
-class AdminController extends BaseController{
+
+use backend\models\Admin;
+use yii\data\ActiveDataProvider;
+use yii;
+
+class AdminController extends BaseController
+{
 
 
-    public function actionLogin(){
 
-        echo '后台登陆入口';
+    public function actionMain()
+    {
+        if (yii::$app->user->isGuest) {
+            $this->redirect(['login']);
+        }
+        return $this->renderPartial('main', []);
     }
+
+
+
+    public function actionMemberManager()
+    {
+
+        $dataGridView = new ActiveDataProvider([
+            'query' => Admin::find(),
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+        return $this->render('member-manager', ['dataGridView' => $dataGridView]);
+    }
+
+
 }
