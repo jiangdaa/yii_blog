@@ -14,44 +14,45 @@ AppAsset::register($this);
         <meta http-equiv="Content-Type" content="text/html; Charset=gb2312">
         <meta http-equiv="Content-Language" content="zh-CN">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-        <title><?= $this->title ?>-Yii2_Blog</title>
-        <link rel="shortcut icon" href="../images/Logo_40.png" type="image/x-icon">
+        <title><?= $this->title ?><?= \yii::$app->params['siteConfig']['title_suffix'] ?></title>
+        <?php $this->registerMetaTag(['name' => 'keyword', 'content' => \yii::$app->params['siteConfig']['keyword']]) ?>
         <?php $this->head() ?>
         <link href="/frontend/css/home.css" rel="stylesheet"/>
     </head>
     <body>
     <?php $this->beginBody() ?>
     <!-- 导航 -->
+
+    <canvas id="canvas">Canvas is not supported in your browser</canvas>
     <nav class="blog-nav layui-header">
         <div class="blog-container">
             <!-- QQ互联登陆 -->
             <a href="javascript:;" class="blog-user">
                 <i class="fa fa-qq"></i>
             </a>
-            <div class="" style=" width:20%;float:right;margin-right:5%;margin-top:15px;z-index:9999;">
-
-                    <input type="password" style="width:70%; height:30px;float:left;" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
-
-                    <button class="layui-btn" style="width:30%;height:30px;">搜索</button>
-
-
-            </div>
             <a href="<?= Url::home() ?>" class="blog-user layui-hide">
-                <img src="#" alt="Absolutely" title="Absolutely"/>
+                <img src="<?= \yii::$app->params['siteConfig']['logo'] ?>"/>
             </a>
             <!-- 不落阁 -->
-            <a class="blog-logo" href="<?= Url::to(['aaa']) ?>">Yii2_Blog</a>
+            <a class="blog-logo" href="<?= Url::to(['index/index']) ?>">
+                <img width="200" height="60" style="line-height:60px;vertical-align:middle;"
+                     src="<?= \yii::$app->params['siteConfig']['logo'] ?>"/>
+                <?= \yii::$app->params['siteConfig']['site_name'] ?>
+            </a>
             <!-- 导航菜单 -->
             <ul class="layui-nav" lay-filter="nav">
-                <li class="layui-nav-item layui-this">
-                    <a href="<?= Url::home() ?>"><i class="fa fa-home fa-fw"></i>&nbsp;博客首页</a>
+                <li class="layui-nav-item <?= Url::current() == Url::to(['index/index']) ? 'layui-this' : '' ?>">
+                    <a href="<?= Url::to(['index/index']) ?>"><i class="fa fa-home fa-fw"></i>&nbsp;博客首页</a>
                 </li>
-                <li class="layui-nav-item">
-                    <a href="resource.html"><i class="fa fa-tags fa-fw"></i>&nbsp;工具分享</a>
+                <li class="layui-nav-item <?= strstr(Url::current(), 'category') || strstr(Url::current(), 'post') ? 'layui-this' : '' ?>">
+                    <a href="<?= Url::to(['category/articles']) ?>"><i class="fa fa-file-text fa-fw"></i>&nbsp;文章专栏</a>
+                </li>
+                <li class="layui-nav-item <?= Url::current() == Url::to(['index/share']) ? 'layui-this' : '' ?>">
+                    <a href="<?= Url::to(['index/share']) ?>"><i class="fa fa-tags fa-fw"></i>&nbsp;工具分享</a>
                 </li>
 
-                <li class="layui-nav-item">
-                    <a href="about.html"><i class="fa fa-info fa-fw"></i>&nbsp;关于本站</a>
+                <li class="layui-nav-item <?= Url::current() == Url::to(['index/about']) ? 'layui-this' : '' ?>">
+                    <a href="<?= Url::to(['index/about']) ?>"><i class="fa fa-info fa-fw"></i>&nbsp;关于本站</a>
                 </li>
             </ul>
 
@@ -62,31 +63,29 @@ AppAsset::register($this);
         </div>
     </nav>
     <!-- 主体（一般只改变这里的内容） -->
-    <div class="blog-body">
+    <div class="blog-body" style="padding-top:20px;">
         <?= $content ?>
     </div>
     <!-- 底部 -->
     <footer class="blog-footer">
-        <p><span>Copyright</span><span>&copy;</span><span>2017</span><a href="#">Yii2_Blog</a><span>Design By JD</span>
+        <p><span><?= \yii::$app->params['siteConfig']['copyright'] ?></span>
         </p>
-        <p><a href="http://www.miibeian.gov.cn/" target="_blank">蜀ICP备16029915号-1</a></p>
+        <p><a href="http://www.miibeian.gov.cn/" target="_blank"><?= \yii::$app->params['siteConfig']['icp'] ?></a></p>
     </footer>
     <!--侧边导航-->
     <ul class="layui-nav layui-nav-tree layui-nav-side blog-nav-left layui-hide" lay-filter="nav">
-        <li class="layui-nav-item layui-this">
-            <a href="home.html"><i class="fa fa-home fa-fw"></i>&nbsp;网站首页</a>
+        <li class="layui-nav-item <?= Url::current() == Url::to(['index/index']) ? 'layui-this' : '' ?>">
+            <a href="<?= Url::to(['index/index']) ?>"><i class="fa fa-home fa-fw"></i>&nbsp;博客首页</a>
         </li>
-        <li class="layui-nav-item">
-            <a href="article.html"><i class="fa fa-file-text fa-fw"></i>&nbsp;文章专栏</a>
+        <li class="layui-nav-item <?= Url::current() == Url::to(['category/articles']) ? 'layui-this' : '' ?>">
+            <a href="<?= Url::to(['category/articles']) ?>"><i class="fa fa-file-text fa-fw"></i>&nbsp;文章专栏</a>
         </li>
-        <li class="layui-nav-item">
-            <a href="resource.html"><i class="fa fa-tags fa-fw"></i>&nbsp;资源分享</a>
+        <li class="layui-nav-item <?= Url::current() == Url::to(['index/share']) ? 'layui-this' : '' ?>">
+            <a href="<?= Url::to(['tool/share']) ?>"><i class="fa fa-tags fa-fw"></i>&nbsp;工具分享</a>
         </li>
-        <li class="layui-nav-item">
-            <a href="timeline.html"><i class="fa fa-road fa-fw"></i>&nbsp;点点滴滴</a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="about.html"><i class="fa fa-info fa-fw"></i>&nbsp;关于本站</a>
+
+        <li class="layui-nav-item <?= Url::current() == Url::to(['index/about']) ? 'layui-this' : '' ?>">
+            <a href="<?= Url::to(['about/site']) ?>"><i class="fa fa-info fa-fw"></i>&nbsp;关于本站</a>
         </li>
     </ul>
     <!--分享窗体-->

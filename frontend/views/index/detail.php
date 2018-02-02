@@ -1,15 +1,30 @@
 <?php
 
 use yii\helpers\Url;
-
+use yii\widgets\Breadcrumbs;
 ?>
     <div class="blog-body">
         <div class="blog-container">
-            <blockquote class="layui-elem-quote sitemap layui-breadcrumb shadow">
-                <a href="home.html" title="网站首页">网站首页</a>
-                <a href="article.html" title="文章专栏">文章专栏</a>
-                <a><cite>基于layui的laypage扩展模块！</cite></a>
-            </blockquote>
+            <?= Breadcrumbs::widget([
+                'homeLink' => ['label' => '博客首页', 'url' => Url::to(['index/index'])],
+                'tag' => 'blockquote',
+                'itemTemplate' => "{link}",
+                'activeItemTemplate'=>'<cate><a>{link}</a></cate>',
+                'links' => [
+                    [
+                        'label' => '文章专栏',
+                        'url' => ['category/articles'],
+                        'template' => "{link}\n", //只用引用该类的模板,
+                    ],
+
+                    $detail['title']
+
+                ],
+                'options' => [ //设置 html 属性
+                    'class' => 'layui-elem-quote sitemap layui-breadcrumb shadow animated fadeInDown',
+                    'style'=>'margin-top:-50px;'
+                ]
+            ]) ?>
             <div class="blog-main">
                 <div class="blog-main-left">
                     <!-- 文章内容（使用Kingeditor富文本编辑器发表的） -->
@@ -54,7 +69,7 @@ use yii\helpers\Url;
                             <?php foreach ($comments as $comment): ?>
                                 <li>
                                     <div class="comment-parent">
-                                        <img src="<?= yii::$app->params['defaultHeadImg'] ?>" />
+                                        <img src="<?= yii::$app->params['defaultHeadImg'] ?>"/>
                                         <div class="info">
                                             <span class="username"><?= $comment['adminname'] ?></span>
                                             <span class="time"><?= $comment['comment_time'] ?></span>

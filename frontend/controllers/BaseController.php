@@ -14,6 +14,8 @@ class BaseController extends Controller
     public function behaviors()
     {
         \yii::$app->params['bloggerInfo'] = \common\models\BloggerInfo::find()->limit(1)->asArray()->one();
+        \yii::$app->params['siteConfig'] = \common\models\SiteConfig::find()->where(['id' => '1'])->asArray()->one();
+        \yii::$app->params['link'] = \common\models\Link::find()->asArray()->all();
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -33,8 +35,6 @@ class BaseController extends Controller
             ]
         ];
     }
-
-
 
 
 }

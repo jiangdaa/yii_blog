@@ -18,12 +18,13 @@ class Category extends ActiveRecord
         return [
             ['name', 'required', 'message' => '分类名称不能为空'],
             ['name', 'unique', 'message' => '分类已存在'],
+            ['type', 'required', 'message' => '类型不能为空']
         ];
     }
 
-    public static function getAllCategory($conversion = true)
+    public static function getAllCategory($conversion = true,$condition = ['type'=>'category'])
     {
-        $result = self::find()->asArray()->all();
+        $result = self::find()->where($condition)->asArray()->all();
         if (!$conversion) {
             return $result;
         }

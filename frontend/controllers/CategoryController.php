@@ -15,16 +15,18 @@ class CategoryController extends BaseController
         $articles = ArticleQry::getInstance();
         $category = Category::getAllCategory();
         $cid = abs((int)yii::$app->request->get('cid'));
+        $condition = ['category' => $cid];
         if (empty($cid)) {
-            $this->goHome();
+            $condition = [];
         }
         return $this->render('articles', [
-            'articles' => $articles->getArticles(['category' => $cid])['data'],
+            'articles' => $articles->getArticles($condition)['data'],
             'pager' => $articles->getArticles()['pager'],
             'categorys' => $category,
             'recommends' => $articles->getArticles(['recommend' => '1'])['data']
         ]);
     }
+
 
 
 }

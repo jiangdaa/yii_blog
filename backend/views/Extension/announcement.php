@@ -48,7 +48,6 @@ echo GridView::widget([
     'pager' => $gather->pager('pagerConfig')
 ]);
 $this->registerCss($gather->pager('css'));
-$this->registerJs(yii::$app->Prompt->jsString());
 ?>
 
 

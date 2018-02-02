@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Share;
 use yii;
 use common\models\Article;
 use common\models\Category;
@@ -33,11 +34,23 @@ class ContentManagerController extends BaseController
 
     public function actionUpload()
     {
-        $model = new Article();
-        $model->scenario = 'upload';
+        $model = '';
+        switch (yii::$app->request->get('cName')) {
+            case 'Article':
+                $model = new Article();
+                break;
+            case 'Share':
+                $model = new Share();
+
+                break;
+        }
         if (Yii::$app->request->isPost) {
+
+            $model->scenario = 'upload';
             $model->file = UploadedFile::getInstance($model, 'file');
+
             if ($model->file && $model->validate()) {
+
                 $today = date('Y-m-d');
                 $filename = $model->file->baseName . '.' . $model->file->extension;
                 $savePath = Url::base(true) . '/blog_cover/' . $today . '/' . $filename;
@@ -179,8 +192,28 @@ class ContentManagerController extends BaseController
     public function actionShare()
     {
 
-        echo '资源分享';
+        return $this->render('share', []);
     }
+
+    public function actionShareAdd()
+    {
+        $model = new Share;
+        $category = (new Category)->getAllCategory('true',['type'=>'share']);
+        if (yii::$app->request->isPost) {
+            $post = yii::$app->request->post();
+            if ($model->addShare($post)) {
+                yii::$app->session->setFlash('info', '添加资源成功');
+            } else {
+                yii::$app->session->setFlash('info', '添加资源失败');
+            }
+        }
+
+        return $this->render('share-add', [
+            'model' => $model,
+            'category'=>$category
+        ]);
+    }
+
 
     public function actionTimeline()
     {

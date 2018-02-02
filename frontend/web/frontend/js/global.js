@@ -1,5 +1,4 @@
-﻿
-layui.use(['element', 'layer', 'util', 'form'], function () {
+﻿layui.use(['element', 'layer', 'util', 'form'], function () {
     var $ = layui.jquery;
     //模拟QQ登陆
     $('.blog-user').click(function () {
@@ -27,8 +26,10 @@ layui.use(['element', 'layer', 'util', 'form'], function () {
 
     //子栏目导航点击事件
     $('.child-nav span').click(function () {
-        layer.msg('切换到相应栏目');
+        var index = $(this).index();
         $(this).addClass('child-nav-btn-this').siblings().removeClass('child-nav-btn-this');
+        $('.resource-main>div').eq(index).removeClass('layui-hide').siblings().addClass('layui-hide animated fadeInDown');
+
     });
 
     //侧边导航开关点击事件
@@ -71,6 +72,7 @@ layui.use(['element', 'layer', 'util', 'form'], function () {
         $('.blog-share').removeClass('layui-hide');
         $('.blog-share').addClass('layui-show');
     }
+
     //隐藏百度分享
     function shareOut() {
         $('.blog-share').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
@@ -80,6 +82,7 @@ layui.use(['element', 'layer', 'util', 'form'], function () {
         $('.blog-share').addClass('shareOut');
         $('.blog-share').removeClass('layui-show');
     }
+
     //显示侧边导航
     function leftIn() {
         $('.blog-mask').unbind('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend');
@@ -95,6 +98,7 @@ layui.use(['element', 'layer', 'util', 'form'], function () {
         $('.blog-nav-left').removeClass('layui-hide');
         $('.blog-nav-left').addClass('layui-show');
     }
+
     //隐藏侧边导航
     function leftOut() {
         $('.blog-mask').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
@@ -112,6 +116,7 @@ layui.use(['element', 'layer', 'util', 'form'], function () {
         $('.blog-nav-left').addClass('leftOut');
         $('.blog-nav-left').removeClass('layui-show');
     }
+
     //显示类别导航
     function categroyIn() {
         $('.category-toggle').addClass('layui-hide');
@@ -121,6 +126,7 @@ layui.use(['element', 'layer', 'util', 'form'], function () {
         $('.article-category').addClass('categoryIn');
         $('.article-category').addClass('layui-show');
     }
+
     //隐藏类别导航
     function categoryOut() {
         $('.article-category').on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {

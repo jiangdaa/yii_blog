@@ -5,12 +5,13 @@ namespace frontend\controllers;
 use common\components\ArticleQry;
 use common\models\Category;
 use common\models\Announcement;
+use common\models\Share;
 use yii;
 
 class IndexController extends BaseController
 {
     public $mustCheck = [];
-    public $noMustCheck = ['index', 'detail'];
+    public $noMustCheck = ['index', 'detail', 'share', 'about'];
 
     public function actionIndex()
     {
@@ -39,6 +40,33 @@ class IndexController extends BaseController
             'comments' => ArticleQry::getInstance()->getArticleComments($aid)
         ]);
 
+    }
+
+    public function actionShare()
+    {
+
+        $category_shares = (new Category)->getAllCategory(true, ['type' => 'share']);
+        $shares = (new Share)->find()->asArray()->all();
+        $new = [];
+
+        foreach ($category_shares as $ckey => $category_share) {
+            foreach ($shares as $skey => $share) {
+                if ($ckey == $share['cid']) {
+                    $new[$share['cid']][] = $share;
+                }
+            }
+        }
+
+        return $this->render('share', [
+            'category_shares' => $category_shares,
+            'shares' => $new
+        ]);
+    }
+
+    public function actionAbout()
+    {
+
+        return $this->render('about');
     }
 
 }

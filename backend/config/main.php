@@ -14,11 +14,11 @@ return [
     'defaultRoute' => 'login/login',
     'modules' => [],
     'components' => [
-        'Prompt'=>[
-            'class'=> 'common\components\Prompt'
+        'Prompt' => [
+            'class' => 'common\components\Prompt'
         ],
-        'Gather'=>[
-            'class'=> 'common\components\Gather'
+        'Gather' => [
+            'class' => 'common\components\Gather'
         ],
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -50,12 +50,12 @@ return [
             'rules' => [
             ],
         ],
-        'authManager' =>[
-            'class'=>'yii\rbac\DbManager',
-            'itemTable'=>'{{%auth_item}}',
-            'itemChildTable'=>'{{%auth_item_child}}',
-            'assignmentTable'=>'{{%auth_assignment}}',
-            'ruleTable'=>'{{%auth_rule}}'
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'itemTable' => '{{%auth_item}}',
+            'itemChildTable' => '{{%auth_item_child}}',
+            'assignmentTable' => '{{%auth_assignment}}',
+            'ruleTable' => '{{%auth_rule}}'
         ]
 
     ],

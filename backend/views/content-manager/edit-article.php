@@ -7,14 +7,14 @@ use kartik\file\FileInput;
 
 ?>
     <blockquote class="layui-elem-quote layui-quote-nm">
-        <a class="layui-btn" href="<?=Url::to('article')?>">返回</a>
+        <a class="layui-btn" href="<?= Url::to('article') ?>">返回</a>
     </blockquote>
 <?php
 
 
 echo Html::beginForm('', 'post', [
     'class' => 'layer-form',
-    'style'=>'width:70%;margin:0 auto;'
+    'style' => 'width:70%;margin:0 auto;'
 ]);
 ?>
     <div class="layui-form-item">
@@ -23,7 +23,7 @@ echo Html::beginForm('', 'post', [
             <?= Html::activeInput('text', $model, 'title', [
                 'class' => 'layui-input'
             ]) ?>
-            <?= Html::error($model, 'title',['class'=>'error']) ?>
+            <?= Html::error($model, 'title', ['class' => 'error']) ?>
         </div>
     </div>
     <div class="layui-form-item">
@@ -32,7 +32,7 @@ echo Html::beginForm('', 'post', [
             <?= Html::activeDropDownList($model, 'category', $categoryList, [
                 'style' => 'height: 28px;margin-top: 4px;'
             ]) ?>
-            <?= Html::error($model, 'category',['class'=>'error']) ?>
+            <?= Html::error($model, 'category', ['class' => 'error']) ?>
         </div>
     </div>
     <div class="layui-form-item">
@@ -77,9 +77,11 @@ echo Html::beginForm('', 'post', [
             <button type="button" class="layui-btn" id="uploadCover" style="vertical-align:top;">
                 <i class="layui-icon">&#xe67c;</i>上传封面
             </button>
-            <img width="200" id="previewImg" src="<?=$model->cover?$model->cover:yii::$app->params['defaultCover']?>" height="200" style="border:1px solid #ccc;margin-bottom:10px;margin-left:30px;" alt="文章封面">
+            <img width="200" id="previewImg"
+                 src="<?= $model->cover ? $model->cover : yii::$app->params['defaultCover'] ?>" height="200"
+                 style="border:1px solid #ccc;margin-bottom:10px;margin-left:30px;" alt="文章封面">
             <?= Html::activeInput('hidden', $model, 'cover', [
-                'id'=>'coverPath'
+                'id' => 'coverPath'
             ]) ?>
         </div>
     </div>
@@ -104,7 +106,7 @@ echo Html::endForm();
 ?>
 
 <?php
-$url = Url::to(['content-manager/upload']);
+$url = Url::to(['content-manager/upload', 'cName' => 'Article']);
 $info = yii::$app->session->hasFlash('info');
 
 $this->registerCss("
@@ -136,7 +138,6 @@ $this->registerJs("
                }else{
                     layer.msg('封面上传失败,请重新尝试');
                }
-
             },
             error: function(){
                 layer.msg('封面上传失败,请重新尝试');

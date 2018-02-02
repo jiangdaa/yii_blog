@@ -2,8 +2,16 @@
 
 use backend\assets\AppAsset;
 use yii\helpers\Html;
+$gather = \yii::$app->Gather;
 
 AppAsset::register($this);
+$this->registerCss($gather->pager('css'));
+$this->registerCss("
+    .error{
+        color:red;
+    }
+");
+$this->registerJs(yii::$app->Prompt->jsString());
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

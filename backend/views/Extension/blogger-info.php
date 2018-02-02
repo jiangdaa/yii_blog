@@ -91,12 +91,6 @@ echo Html::beginForm('', 'post', [
     </div>
 <?php
 echo Html::endForm();
-$this->registerCss($gather->pager('css'));
-$this->registerCss("
-    .error{
-        color:red;
-    }
-");
-$this->registerJs(yii::$app->Prompt->jsString());
+
 
 ?>

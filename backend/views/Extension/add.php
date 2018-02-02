@@ -40,10 +40,5 @@ echo Html::beginForm('', 'post', [
     </div>
 <?php
 echo Html::endForm();
-$this->registerCss("
-    .error{
-        color:red;
-    }
 
-");
 ?>

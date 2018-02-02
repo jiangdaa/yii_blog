@@ -104,7 +104,7 @@ echo Html::endForm();
 ?>
 
 <?php
-$url = Url::to(['content-manager/upload']);
+$url = Url::to(['content-manager/upload', 'cName' => 'Article']);
 $info = yii::$app->session->hasFlash('info');
 
 $this->registerCss("

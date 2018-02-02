@@ -8,10 +8,8 @@ class Article extends ActiveRecord
 {
 
     public $file;
-
     public static function tableName()
     {
-
         return '{{%article}}';
     }
 

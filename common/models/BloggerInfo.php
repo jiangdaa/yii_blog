@@ -28,12 +28,9 @@ class BloggerInfo extends ActiveRecord
     public function editBlogger($data)
     {
         if ($this->load($data) && $this->validate()) {
-            return $this->updateAll($data['BloggerInfo'],['id' => 1]);
-
+            return $this->updateAll($data['BloggerInfo'], ['id' => 1]);
         }
         return false;
-
-
     }
 
 

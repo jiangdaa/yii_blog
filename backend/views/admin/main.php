@@ -85,15 +85,14 @@ function can($permission)
                         ['label' => '菜单配置', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
                     ]],
                     ['label' => '<i class="fa fa-file-text"></i>扩展管理', 'url' => ['javascript:;'], 'items' => [
-                        ['label' => '友情链接', 'url' => ['permissions-manager/add-role'], 'visible' => can('permissions-manager/add-role')],
+                        ['label' => '友情链接', 'url' => ['extension/link'], 'visible' => can('extension/link')],
                         ['label' => '博主信息', 'url' => ['extension/blogger-info'], 'visible' => can('extension/blogger-info')],
-                        ['label' => '网站信息', 'url' => ['permissions-manager/add-rule'], 'visible' => can('permissions-manager/add-rule')],
+                        ['label' => '网站信息', 'url' => ['extension/site-config'], 'visible' => can('extension/site-config')],
                         ['label' => '留言管理', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
                         ['label' => '网站公告', 'url' => ['extension/announcement'], 'visible' => can('extension/announcement')],
                         ['label' => '更新日志', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
                     ]],
                     ['label' => '<i class="fa fa-file-text"></i>系统配置', 'url' => ['javascript:;'], 'items' => [
-                        ['label' => 'SEO配置', 'url' => ['permissions-manager/add-role'], 'visible' => can('permissions-manager/add-role')],
                         ['label' => 'QQ互联', 'url' => ['permissions-manager/role-list'], 'visible' => can('permissions-manager/role-list')],
                         ['label' => '数据库配置', 'url' => ['permissions-manager/add-rule'], 'visible' => can('permissions-manager/add-rule')],
                         ['label' => '站点地图', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
