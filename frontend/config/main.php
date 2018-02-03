@@ -24,6 +24,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'common\models\User',
+            'enableSession' => true,
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
@@ -47,14 +48,31 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'suffix'=>'.html',
+            'suffix' => '.html',
             'rules' => [
                 'home' => 'index/index',
+                'about' => 'index/about',
+                'share' => 'index/share',
                 'categorys/<cid:\d+>' => 'category/articles',
-                'post/<aid:\d+>'=>'index/detail',
-
+                'post/<aid:\d+>' => 'index/detail',
             ],
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.qq.com',
+                'username' => 'jiangdaa@qq.com',
+                'password' => 'axugwxbcoiqhbffj',
+                'port' => '25',
+                'encryption' => 'tls',
+            ],
+        ]
+
 
     ],
     'params' => $params,

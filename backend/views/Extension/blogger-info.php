@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+use common\widgets\ueditor\Ueditor;
 $gather = \yii::$app->Gather;
 ?>
 
@@ -39,6 +39,25 @@ echo Html::beginForm('', 'post', [
                 'class' => 'layui-input'
             ]) ?>
             <?= Html::error($model, 'blogger_address', ['class' => 'error']) ?>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">博主信息</label>
+        <div class="layui-input-block">
+            <?= Html::activeInput('text', $model, 'blogger_info', [
+                'placeholder' => '博主信息',
+                'class' => 'layui-input'
+            ]) ?>
+            <?= Html::error($model, 'blogger_info', ['class' => 'error']) ?>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">博主描述</label>
+
+        <div class="layui-input-block">
+            <?= Ueditor::widget(['model' => $model, 'attribute' => 'blogger_describe', 'options' => ['initialFrameWidth' => '100%',]]) ?>
+
+            <?= Html::error($model, 'blogger_describe', ['class' => 'error']) ?>
         </div>
     </div>
     <div class="layui-form-item">

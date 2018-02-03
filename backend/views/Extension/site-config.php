@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\widgets\ueditor\Ueditor;
 
 ?>
 
@@ -72,10 +73,19 @@ echo Html::beginForm('', 'post', [
         <label class="layui-form-label">标题后缀</label>
         <div class="layui-input-block">
             <?= Html::activeInput('text', $model, 'title_suffix', [
-                'placeholder' => '网站小图标',
+                'placeholder' => '标题后缀',
                 'class' => 'layui-input'
             ]) ?>
             <?= Html::error($model, 'title_suffix', ['class' => 'error']) ?>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">网站描述</label>
+        <div class="layui-input-block">
+            <?= Ueditor::widget(['model' => $model, 'attribute' => 'site_intro', 'options' => ['initialFrameWidth' => '100%',]]) ?>
+
+
+            <?= Html::error($model, 'site_intro', ['class' => 'error']) ?>
         </div>
     </div>
     <div class="layui-form-item">

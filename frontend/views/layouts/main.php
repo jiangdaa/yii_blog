@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use frontend\assets\AppAsset;
 
 AppAsset::register($this);
-
+//echo Url::to(['index/login']);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -26,18 +26,33 @@ AppAsset::register($this);
     <canvas id="canvas">Canvas is not supported in your browser</canvas>
     <nav class="blog-nav layui-header">
         <div class="blog-container">
+
             <!-- QQ互联登陆 -->
-            <a href="javascript:;" class="blog-user">
-                <i class="fa fa-qq"></i>
-            </a>
+            <!-- <a href="javascript:;" class="blog-user">
+                 <i class="fa fa-qq"></i>
+             </a>-->
+            <?php
+            if (!\yii::$app->user->isGuest):
+                ?>
+                <a href="javascript:;" class="blog-user" style="color:#ccc;font-size:20px;">
+                    <i class="fa fa-qq"></i>
+                </a>
+            <?php else : ?>
+                <a href="javascript:;" class="blog-user" style="color:#ccc;font-size:20px;">
+                    <i class="fa fa-envelope-o fa-fw"></i>
+                </a>
+            <?php endif ?>
             <a href="<?= Url::home() ?>" class="blog-user layui-hide">
                 <img src="<?= \yii::$app->params['siteConfig']['logo'] ?>"/>
             </a>
             <!-- 不落阁 -->
             <a class="blog-logo" href="<?= Url::to(['index/index']) ?>">
-                <img width="200" height="60" style="line-height:60px;vertical-align:middle;"
-                     src="<?= \yii::$app->params['siteConfig']['logo'] ?>"/>
-                <?= \yii::$app->params['siteConfig']['site_name'] ?>
+                <?php if (empty(\yii::$app->params['siteConfig']['logo'])): ?>
+                    <?= \yii::$app->params['siteConfig']['site_name'] ?>
+                <?php else: ?>
+                    <img width="200" height="60" style="line-height:60px;vertical-align:middle;"
+                         src="<?= \yii::$app->params['siteConfig']['logo'] ?>"/>
+                <?php endif ?>
             </a>
             <!-- 导航菜单 -->
             <ul class="layui-nav" lay-filter="nav">

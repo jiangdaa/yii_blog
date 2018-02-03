@@ -37,3 +37,4 @@ phpunit.phar
 /backend/web/assets
 /backend/web/blog_cover
 /backend/web/backend
+/backend/web/site_img

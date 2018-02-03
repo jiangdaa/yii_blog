@@ -33,45 +33,31 @@ use yii\widgets\Breadcrumbs;
                     <div class="layui-tab-item">
                         <div class="aboutinfo">
                             <div class="aboutinfo-figure">
-                                <img src="../images/Logo_100.png" alt="不落阁"/>
+                                <?php if (!empty(\yii::$app->params['siteConfig']['logo'])): ?>
+                                    <img src="<?= \yii::$app->params['siteConfig']['logo'] ?>"
+                                         alt="<?= \yii::$app->params['siteConfig']['site_name'] ?>"/>
+                                <?php endif ?>
                             </div>
-                            <p class="aboutinfo-nickname">不落阁</p>
-                            <p class="aboutinfo-introduce">一个.NET程序员的个人博客，记录博主学习和成长之路，分享.NET方面技术和源码</p>
-                            <p class="aboutinfo-location"><i class="fa fa-link"></i>&nbsp;&nbsp;<a target="_blank"
-                                                                                                   href="http://www.lyblogs.cn">www.lyblogs.cn</a>
+                            <p class="aboutinfo-nickname"><?= \yii::$app->params['siteConfig']['site_name'] ?></p>
+                            <p class="aboutinfo-location">
+                                <i class="fa fa-link"></i>&nbsp;&nbsp;
+                                <a target="_blank" href="<?= Url::base(true) ?>">
+                                    <?= Url::base(true) ?>
+                                </a>
                             </p>
-                            <hr/>
-                            <div class="aboutinfo-contact">
-                                <a target="_blank" title="网站首页" href="home.html"><i class="fa fa-home fa-2x"
-                                                                                    style="font-size:2.5em;position:relative;top:3px"></i></a>
-                                <a target="_blank" title="文章专栏" href="article.html"><i
-                                            class="fa fa-file-text fa-2x"></i></a>
-                                <a target="_blank" title="资源分享" href="resource.html"><i
-                                            class="fa fa-tags fa-2x"></i></a>
-                                <a target="_blank" title="点点滴滴" href="timeline.html"><i
-                                            class="fa fa-hourglass-half fa-2x"></i></a>
-                            </div>
-
                             <fieldset class="layui-elem-field layui-field-title">
                                 <legend>简介</legend>
                                 <div class="layui-field-box aboutinfo-abstract">
-                                    <p style="text-align:center;">不落阁是一个由ASP.NET
-                                        MVC开发的个人博客网站，诞生于2016年11月7日，起劲为止经历了一次大改，暂且称为不落阁2.0。</p>
-                                    <h1>第一个版本</h1>
-                                    <p>诞生的版本，采用ASP.NET MVC + Entity
-                                        Framework作为后台框架，前端几乎自己手写，用了Bootstrap的栅格系统来布局！起初并没有注意美工，只打算完成基本的功能，故视觉体验是比较差的。</p>
-                                    <h1>第二个版本</h1>
-                                    <p>
-                                        由于感觉EF查询数据的时候较慢（后来发现是自己搞错了），于是自己写了个ORM，其实也算不上ORM，就是将ADO.NET进行封装，再封装，再利用反射将数据库表与实体类一一对应，有了基本的增删改查、事务、自动建表等功能，同时为了配合这个ORM，将项目改成三层，前端方面加入了Animate.css的动画效果，同时自己手写了几个动画，并制作了浅色于深色两种主题的样式，视觉体验稍有提高。</p>
-                                    <h1>当前版本</h1>
-                                    <p>
-                                        从公司的一个后台管理系统的前端发现了Layer弹窗插件，于是追根溯源，发现了Layui前端框架！Layui简洁的风格让我很是喜欢，于是决定再次将网站改版！此次改版从里到外几乎全部更新。后台增加了面向接口开发，使用了IOC框架，同时ORM回归到Entity
-                                        Framework，前端则移除Bootstarp，引入Layui。视觉体验显著提高。</p>
+                                    <p style="text-align:center;">
+                                    <div>
+                                        <?= empty(\yii::$app->params['siteConfig']['site_intro']) ? '暂无简介' : \yii::$app->params['siteConfig']['site_intro'] ?>
+                                    </div>
                                     <h1 style="text-align:center;">The End</h1>
                                 </div>
                             </fieldset>
                         </div>
                     </div><!--关于网站End-->
+
                     <div class="layui-tab-item">
                         <div class="aboutinfo">
                             <div class="blogerinfo-figure">
@@ -100,11 +86,14 @@ use yii\widgets\Breadcrumbs;
                             <fieldset class="layui-elem-field layui-field-title">
                                 <legend>简介</legend>
                                 <div class="layui-field-box aboutinfo-abstract abstract-bloger">
-                                    <p style="text-align:center;">Absolutely，不落阁创始人，诞生于1996年2月14日，目前是一个码农，从事.NET开发。</p>
                                     <h1>个人信息</h1>
-                                    <p>暂无</p>
+                                    <div>
+                                        <?= \yii::$app->params['bloggerInfo']['blogger_info'] ?>
+                                    </div>
                                     <h1>个人介绍</h1>
-                                    <p>一个没有故事的男同学，没什么介绍......</p>
+                                    <div>
+                                        <?= \yii::$app->params['bloggerInfo']['blogger_describe'] ?>
+                                    </div>
                                     <h1 style="text-align:center;">The End</h1>
                                 </div>
                             </fieldset>
@@ -116,14 +105,14 @@ use yii\widgets\Breadcrumbs;
                                 <img src="/frontend/images/handshake.png" alt="友情链接"/>
                             </div>
                             <p class="aboutinfo-nickname">友情链接</p>
-                            <p class="aboutinfo-introduce">Name：不落阁&nbsp;&nbsp;&nbsp;&nbsp;Site：www.lyblogs.cn</p>
+
                             <p class="aboutinfo-location">
-                                <i class="fa fa-close"></i>经常宕机&nbsp;
-                                <i class="fa fa-close"></i>不合法规&nbsp;
-                                <i class="fa fa-close"></i>插边球站&nbsp;
-                                <i class="fa fa-close"></i>红标报毒&nbsp;
-                                <i class="fa fa-check"></i>原创优先&nbsp;
-                                <i class="fa fa-check"></i>技术优先
+                                <span style="color:red;"><i class="fa fa-close"></i>经常宕机&nbsp;</span>
+                                <span style="color:red;"><i class="fa fa-close"></i>不合法规&nbsp;</span>
+                                <span style="color:red;"><i class="fa fa-close"></i>插边球站&nbsp;</span>
+                                <span style="color:red;"><i class="fa fa-close"></i>红标报毒&nbsp;</span>
+                                <span style="color:green;"><i class="fa fa-check"></i>原创优先&nbsp;</span>
+                                <span style="color:green;"><i class="fa fa-check"></i>技术优先</span>
                             </p>
                             <hr/>
                             <div class="aboutinfo-contact">
@@ -146,7 +135,6 @@ use yii\widgets\Breadcrumbs;
                                                 </a>
                                             </li>
                                         <?php endforeach ?>
-
                                     </ul>
                                 </div>
                             </fieldset>

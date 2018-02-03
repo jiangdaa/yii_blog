@@ -14,6 +14,19 @@ class ExtensionController extends BaseController
 {
     public $enableCsrfValidation = false;
 
+    public function actions()
+    {
+        return [
+            'ueditor' => [
+                'class' => 'common\widgets\ueditor\UeditorAction',
+                'config' => [
+                    'imageUrlPrefix' => "",
+                    'imagePathFormat' => "/image/{yyyy}{mm}{dd}/{time}{rand:6}",
+                ]
+            ]
+        ];
+    }
+
     public function actionUpload()
     {
         $cName = \yii::$app->request->get('cName');
@@ -185,7 +198,7 @@ class ExtensionController extends BaseController
         if (\yii::$app->request->isPost) {
             $post = \yii::$app->request->post();
 
-          unset($post['Link']['file']);
+            unset($post['Link']['file']);
             if (!empty($id) && $model->updateAll($post['Link'], ['id' => $id])) {
                 \yii::$app->session->setFlash('info', '友情链接修改成功');
                 return $this->redirect(['link']);

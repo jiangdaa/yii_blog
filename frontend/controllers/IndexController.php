@@ -10,8 +10,8 @@ use yii;
 
 class IndexController extends BaseController
 {
-    public $mustCheck = [];
-    public $noMustCheck = ['index', 'detail', 'share', 'about'];
+    public $mustCheck = ['logout', 'index', 'detail', 'share', 'about', 'login', 'register'];
+    public $noMustCheck = ['index', 'detail', 'share', 'about', 'login', 'register'];
 
     public function actionIndex()
     {
@@ -44,11 +44,9 @@ class IndexController extends BaseController
 
     public function actionShare()
     {
-
         $category_shares = (new Category)->getAllCategory(true, ['type' => 'share']);
         $shares = (new Share)->find()->asArray()->all();
         $new = [];
-
         foreach ($category_shares as $ckey => $category_share) {
             foreach ($shares as $skey => $share) {
                 if ($ckey == $share['cid']) {
@@ -56,7 +54,6 @@ class IndexController extends BaseController
                 }
             }
         }
-
         return $this->render('share', [
             'category_shares' => $category_shares,
             'shares' => $new
@@ -65,8 +62,26 @@ class IndexController extends BaseController
 
     public function actionAbout()
     {
-
         return $this->render('about');
+    }
+
+    public function actionLogin()
+    {
+        $this->layout = 'empty';
+
+        return $this->render('login');
+    }
+
+    public function actionRegister()
+    {
+
+        $this->layout = 'empty';
+        return $this->render('register');
+    }
+
+    public function actionLogout()
+    {
+        return \yii::$app->user->logout(true);
     }
 
 }

@@ -2,12 +2,28 @@
     var $ = layui.jquery;
     //模拟QQ登陆
     $('.blog-user').click(function () {
-        var user = this;
-        var index = layer.load(1);
-        setTimeout(function () {
-            layer.close(index);
-            $(user).toggleClass('layui-hide').siblings('a.blog-user').toggleClass('layui-hide');
-        }, 800);
+
+        var defaultWidth = '60vh';
+        if ((window.document.body.clientWidth) < 500) {
+            defaultWidth = '50vh';
+        }
+        layer.open({
+            type: 2,
+            title: 'David Blog',
+            shadeClose: true,
+            shade: 0.8,
+            area: [defaultWidth, '70%'],
+            content: '/index/login.html' //iframe的url
+        });
+
+
+        //layer.msg('暂未开放');
+        // var user = this;
+        // var index = layer.load(1);
+        // setTimeout(function () {
+        //     layer.close(index);
+        //     $(user).toggleClass('layui-hide').siblings('a.blog-user').toggleClass('layui-hide');
+        // }, 800);
     });
     //分享工具
     layui.util.fixbar({

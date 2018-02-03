@@ -20,7 +20,7 @@ class BloggerInfo extends ActiveRecord
             ['blogger_name', 'required', 'message' => '博主名称不能为空'],
             ['blogger_signature', 'required', 'message' => '博主个性签名不能为空'],
             ['blogger_address', 'required', 'message' => '博主地址不能为空'],
-            [['qq', 'email', 'github', 'weibo'], 'safe']
+            [['qq', 'email', 'github', 'weibo', 'blogger_info', 'blogger_describe'], 'safe']
         ];
     }
 

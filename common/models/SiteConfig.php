@@ -8,6 +8,7 @@ class SiteConfig extends ActiveRecord
 {
 
     public $file;
+
     public static function tableName()
     {
         return "{{%site_config}}";
@@ -22,6 +23,7 @@ class SiteConfig extends ActiveRecord
             ['copyright', 'required', 'message' => '请输入网站版权', 'on' => 'edit'],
             ['icp', 'required', 'message' => '请输入网站备案信息', 'on' => 'edit'],
             ['title_suffix', 'required', 'message' => '请输入网站标题后缀', 'on' => 'edit'],
+            ['site_intro', 'safe'],
             [['file'], 'file', 'extensions' => 'jpg,png', 'checkExtensionByMimeType' => false, 'on' => 'upload'],
         ];
     }
@@ -29,7 +31,6 @@ class SiteConfig extends ActiveRecord
     public function editSiteConfig($data)
     {
         $this->scenario = 'edit';
-
         if ($this->load($data) && $this->validate()) {
             unset($data['SiteConfig']['file']);
             return (bool)$this->updateAll($data['SiteConfig'], ['id' => '1']);
