@@ -2,6 +2,7 @@
 
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
+$this->title = $detail['title'];
 ?>
     <div class="blog-body">
         <div class="blog-container">
@@ -9,20 +10,18 @@ use yii\widgets\Breadcrumbs;
                 'homeLink' => ['label' => '博客首页', 'url' => Url::to(['index/index'])],
                 'tag' => 'blockquote',
                 'itemTemplate' => "{link}",
-                'activeItemTemplate'=>'<cate><a>{link}</a></cate>',
+                'activeItemTemplate' => '<cate><a>{link}</a></cate>',
                 'links' => [
                     [
                         'label' => '文章专栏',
                         'url' => ['category/articles'],
                         'template' => "{link}\n", //只用引用该类的模板,
                     ],
-
                     $detail['title']
-
                 ],
                 'options' => [ //设置 html 属性
                     'class' => 'layui-elem-quote sitemap layui-breadcrumb shadow animated fadeInDown',
-                    'style'=>'margin-top:-50px;'
+                    'style' => 'margin-top:-50px;'
                 ]
             ]) ?>
             <div class="blog-main">
@@ -52,16 +51,17 @@ use yii\widgets\Breadcrumbs;
                         <fieldset class="layui-elem-field layui-field-title" style="margin-bottom:0">
                             <legend>来说两句吧</legend>
                             <div class="layui-field-box">
-                                <form class="layui-form blog-editor" action="">
+                                <div class="layui-form blog-editor">
                                     <div class="layui-form-item">
-                                    <textarea name="editorContent" lay-verify="content" id="remarkEditor"
-                                              placeholder="请输入内容" class="layui-textarea layui-hide"></textarea>
+                                        <input type="hidden" name="aid" value="<?= $detail['id'] ?>">
+                                        <textarea name="comment_content" lay-verify="content" id="remarkEditor"
+                                                  placeholder="请输入内容" class="layui-textarea layui-hide"></textarea>
                                     </div>
                                     <div class="layui-form-item">
                                         <button class="layui-btn" lay-submit="formRemark" lay-filter="formRemark">提交评论
                                         </button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </fieldset>
                         <div class="blog-module-title">最新评论</div>
@@ -71,12 +71,59 @@ use yii\widgets\Breadcrumbs;
                                     <div class="comment-parent">
                                         <img src="<?= yii::$app->params['defaultHeadImg'] ?>"/>
                                         <div class="info">
-                                            <span class="username"><?= $comment['adminname'] ?></span>
-                                            <span class="time"><?= $comment['comment_time'] ?></span>
+                                            <span class="username"><?= $comment['nick_name'] ?></span>
                                         </div>
                                         <div class="content">
+                                            <br>
                                             <?= $comment['comment_content'] ?>
                                         </div>
+                                        <p class="info info-footer">
+                                            <span class="time"><?= $comment['comment_time'] ?></span>
+                                            <a class="btn-reply"
+                                               href="javascript:;"
+                                               onclick="btnReplyClick(this)">回复</a>
+                                        </p>
+                                    </div>
+                                    <hr>
+                                    <?php if (!empty($comment['child'])): ?>
+                                        <?php foreach ($comment['child'] as $child): ?>
+                                            <div class="comment-child">
+                                                <img src="<?= empty($child['portrait']) ? \yii::$app->params['defaultHeadImg'] : $child['portrait']; ?>"/>
+                                                <div class="info">
+                                                    <span class="username">
+                                                        <?= $child['nick_name'] ?>
+                                                    </span>
+                                                    <span>
+                                                        <?= $child['comment_content'] ?>
+                                                    </span>
+                                                </div>
+                                                <p class="info">
+                                                    <span class="time"><?= $child['comment_time'] ?></span>
+                                                </p>
+                                            </div>
+                                            <hr>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
+                                    <!-- 回复表单默认隐藏 -->
+                                    <div class="replycontainer layui-hide">
+                                        <form class="layui-form" action="">
+                                            <div class="layui-form-item">
+                                                <input type="hidden" class="layui-input" name="pid"
+                                                       value="<?= $comment['id'] ?>">
+                                                <input type="hidden" class="layui-input" name="uid"
+                                                       value="<?= $comment['uid'] ?>">
+                                                <textarea name="comment_content" lay-verify="replyContent"
+                                                          placeholder="请输入回复内容" class="layui-textarea"
+                                                          style="min-height:80px;"></textarea>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <button class="layui-btn layui-btn-mini"
+                                                        lay-submit="formReply"
+                                                        lay-filter="formReply">
+                                                    提交
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </li>
                             <?php endforeach ?>
@@ -90,7 +137,7 @@ use yii\widgets\Breadcrumbs;
                     <div class="article-category shadow">
                         <div class="article-category-title">分类导航</div>
                         <?php foreach ($categorys as $key => $category): ?>
-                            <a href="<?= Url::to(['category/articles', 'cid' => $key]) ?>"><?= $category ?></a>
+                            <a href="<?= Url::to(['index/category', 'cid' => $key]) ?>"><?= $category ?></a>
                         <?php endforeach ?>
                         <div class="clear"></div>
                     </div>

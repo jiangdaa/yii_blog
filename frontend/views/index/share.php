@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
-
+$this->title = '工具分享';
 ?>
 
     <div class="blog-container" style="margin-top:90px;">
@@ -24,26 +24,22 @@ use yii\widgets\Breadcrumbs;
         ]) ?>
 
         <div class="blog-main">
-
             <div class="child-nav shadow  animated fadeInRight">
                 <?php $k = 0;
                 foreach ($category_shares as $category_share): ?>
                     <span class="child-nav-btn <?= $k == 0 ? 'child-nav-btn-this' : '' ?>"><?= $category_share ?></span>
                     <?php $k++ ?>
                 <?php endforeach ?>
-
             </div>
             <div class="resource-main  animated fadeInUp">
                 <?php $k = 0; ?>
-                <?php foreach ($shares
-
-                               as $share): ?>
-                    <div class="<?= $k == 0 ? '' : 'layui-hide' ?>">
+                <?php foreach ($shares as $share): ?>
+                    <div class="<?= $k == 0 ? '' : 'layui-hide' ?> animated fadeInDown ">
                         <?php foreach ($share as $share_v): ?>
                             <div class="resource shadow">
                                 <div class="resource-cover">
                                     <a href="javascript:layer.msg(&#39;暂未开发&#39;)" target="_blank">
-                                        <img src="<?= $share_v['cover'] ?>" alt="时光轴"/>
+                                        <img src="<?= $share_v['cover'] ?>"/>
                                     </a>
                                 </div>
                                 <h1 class="resource-title">

@@ -76,7 +76,7 @@ function can($permission)
                         ['label' => '文章回收站', 'url' => ['content-manager/recycle'], 'visible' => can('content-manager/recycle')],
                     ]],
                     ['label' => '<i class="fa fa-file-text"></i>用户管理', 'url' => ['javascript:;'], 'items' => [
-                        ['label' => '后台用户管理', 'url' => ['admin/member-manager'], 'visible' => can('admin/member-manager')],
+                        ['label' => '前台用户管理', 'url' => ['consumer-manager/frontend-consumer'], 'visible' => can('consumer-manager/frontend-consumer')],
                     ]],
                     ['label' => '<i class="fa fa-file-text"></i>权限管理', 'url' => ['javascript:;'], 'items' => [
                         ['label' => '添加角色', 'url' => ['permissions-manager/add-role'], 'visible' => can('permissions-manager/add-role')],
@@ -88,15 +88,13 @@ function can($permission)
                         ['label' => '友情链接', 'url' => ['extension/link'], 'visible' => can('extension/link')],
                         ['label' => '博主信息', 'url' => ['extension/blogger-info'], 'visible' => can('extension/blogger-info')],
                         ['label' => '网站信息', 'url' => ['extension/site-config'], 'visible' => can('extension/site-config')],
-                        ['label' => '留言管理', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
-                        ['label' => '网站公告', 'url' => ['extension/announcement'], 'visible' => can('extension/announcement')],
-                        ['label' => '更新日志', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
+                        ['label' => '留言管理', 'url' => ['extension/leave-msg'], 'visible' => can('extension/leave-msg')],
+                        ['label' => '网站公告', 'url' => ['extension/announcement'], 'visible' => can('extension/announcement')]
                     ]],
                     ['label' => '<i class="fa fa-file-text"></i>系统配置', 'url' => ['javascript:;'], 'items' => [
                         ['label' => 'QQ互联', 'url' => ['permissions-manager/role-list'], 'visible' => can('permissions-manager/role-list')],
                         ['label' => '数据库配置', 'url' => ['permissions-manager/add-rule'], 'visible' => can('permissions-manager/add-rule')],
-                        ['label' => '站点地图', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
-                        ['label' => '操作日志', 'url' => ['permissions-manager/menu'], 'visible' => can('permissions-manager/menu')],
+                        ['label' => '操作日志', 'url' => ['system/log'], 'visible' => can('system/log')],
                     ]],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                 ],
@@ -128,28 +126,28 @@ function can($permission)
                         <div class="layui-field-box">
                             <div style="display: inline-block; width: 100%;">
                                 <div class="ht-box layui-bg-blue">
-                                    <p>123</p>
+                                    <p><?= $total['userCount'] ?></p>
                                     <p>用户总数</p>
                                 </div>
                                 <div class="ht-box layui-bg-red">
-                                    <p>32</p>
+                                    <p><?= $total['todayRegCount'] ?></p>
                                     <p>今日注册</p>
                                 </div>
                                 <div class="ht-box layui-bg-green">
-                                    <p>55</p>
+                                    <p><?= $total['todayLoginCount'] ?></p>
                                     <p>今日登陆</p>
                                 </div>
                                 <div class="ht-box layui-bg-orange">
-                                    <p>123</p>
+                                    <p><?= $total['articleCount'] ?></p>
                                     <p>文章总数</p>
                                 </div>
                                 <div class="ht-box layui-bg-cyan">
-                                    <p>321</p>
+                                    <p><?= $total['shareCount'] ?></p>
                                     <p>资源总数</p>
                                 </div>
                                 <div class="ht-box layui-bg-black">
-                                    <p>231</p>
-                                    <p>笔记总数</p>
+                                    <p><?= $total['todayLeaveMsgCount'] ?></p>
+                                    <p>今日留言</p>
                                 </div>
                             </div>
                         </div>

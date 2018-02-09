@@ -3,8 +3,13 @@ namespace frontend\controllers;
 
 use yii\web\Controller;
 
-/*
- *  ErrorController  定义error模板
+/**
+ * -------------------------------------------
+ *
+ * Class ErrorController 定义error模板
+ * @package frontend\controllers
+ *
+ * -------------------------------------------
  */
 class ErrorController extends Controller{
 

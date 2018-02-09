@@ -13,14 +13,13 @@ use yii\helpers\Url;
                         <div class="layui-form-item">
                             <label for="L_email" class="layui-form-label">邮箱</label>
                             <div class="layui-input-inline">
-                                <input placeholder="将会成为您唯一的登入名"
+                                <input placeholder="请输入注册邮箱"
                                        name="email"
                                        required=""
                                        lay-verify="email"
                                        autocomplete="off"
                                        class="layui-input"
                                        type="text">
-
                             </div>
                             <div class="layui-inline">
                                 <label class="layui-form-label" style="display:none;"></label>
@@ -77,7 +76,7 @@ use yii\helpers\Url;
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <button class="layui-btn" lay-filter="register" lay-submit="">立即注册</button>
+                            <button class="layui-btn" id="fastRegister" lay-filter="register" lay-submit="">立即注册</button>
                         </div>
                         <div class="layui-form-item fly-form-app"><span>或者直接使用社交账号快捷注册</span>
                         </div>

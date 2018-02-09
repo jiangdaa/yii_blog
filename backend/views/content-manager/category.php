@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+$this->registerJs(\yii::$app->Prompt->jsString());
 ?>
 
 <blockquote class="layui-elem-quote layui-quote-nm">

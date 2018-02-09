@@ -20,7 +20,6 @@ echo GridView::widget([
         'style' => 'width:100%;'
     ],
     'columns' => [
-
         'id',
         [
             'label' => '文章标题',

@@ -4,12 +4,14 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
 
     public $check_code;
+    public $file;
 
     public static function tableName()
     {
@@ -22,9 +24,11 @@ class User extends ActiveRecord implements IdentityInterface
             ['password', 'required', 'message' => '密码不能为空', 'on' => ['register', 'login']],
             ['email', 'email', 'message' => '邮箱格式不正确', 'on' => ['register', 'login']],
             ['email', 'unique', 'message' => '邮箱已被注册', 'on' => ['register']],
-            ['nick_name', 'required', 'message' => '昵称不能为空', 'on' => ['register']],
+            ['nick_name', 'required', 'message' => '昵称不能为空', 'on' => ['register', 'edit']],
+            ['nick_name', 'unique', 'message' => '昵称已存在', 'on' => ['register', 'edit']],
             ['check_code', 'verifyEmailCode', 'on' => ['register']],
-            [['portrait', 'ip', 'login_time', 'created_time'], 'safe']
+            [['portrait', 'ip', 'login_time', 'created_time', 'state'], 'safe'],
+            [['file'], 'file', 'extensions' => 'jpg,png', 'checkExtensionByMimeType' => false, 'on' => 'upload'],
         ];
 
     }
@@ -64,13 +68,15 @@ class User extends ActiveRecord implements IdentityInterface
         return false;
     }
 
-    public function register($data)
+    public function register($data, $rand_portrait)
     {
         $this->scenario = 'register';
         if ($this->load($data) && $this->validate($data) && $this->verifyEmailCode()) {
             $this->password = sha1(md5($this->password) . 'David');
             $this->created_time = date('Y-m-d H:i:s', time());
             $this->user_name = $this->email;
+            $this->state = '0';
+            $this->portrait = $rand_portrait;
             return $this->save();
         }
         return false;
@@ -82,10 +88,26 @@ class User extends ActiveRecord implements IdentityInterface
         $this->scenario = 'login';
         $checkResult = null;
         if ($this->load($data) && $this->validate() && $checkResult = $this->validatePassword()) {
-            return \yii::$app->user->login($checkResult);
+            if (\yii::$app->user->login($checkResult)) {
+                return (bool)$this->updateAll(['ip' => ip2long(\yii::$app->request->userIP), 'login_time' => date('Y-m-d H:i:s', time())], ['id' => \yii::$app->user->id]);
+            }
         }
+
         return false;
     }
+
+
+    private function checkBlacklist()
+    {
+
+        if (\yii::$app->user->id === '1') {
+            $this->addError('user_name', '账号已被禁用');
+            return false;
+        }
+        return true;
+
+    }
+
 
     public static function findIdentity($id)
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace common\widgets\ueditor;
 
 use Yii;
@@ -13,7 +14,7 @@ class UeditorAction extends Action
      * @var array
      */
     public $config = [];
-    
+
     public function init()
     {
         //close csrf
@@ -24,7 +25,7 @@ class UeditorAction extends Action
         $this->config = ArrayHelper::merge($_config, $this->config);
         parent::init();
     }
-    
+
     public function run()
     {
         $action = Yii::$app->request->get('action');
@@ -71,7 +72,7 @@ class UeditorAction extends Action
             echo $result;
         }
     }
-    
+
     /**
      * 上传
      * @return string
@@ -131,6 +132,7 @@ class UeditorAction extends Action
         /* 返回数据 */
         return json_encode($up->getFileInfo());
     }
+
     /**
      * 获取已上传的文件列表
      * @return string
@@ -186,6 +188,7 @@ class UeditorAction extends Action
         ));
         return $result;
     }
+
     /**
      * 抓取远程图片
      * @return string
@@ -225,6 +228,7 @@ class UeditorAction extends Action
             'list' => $list
         ));
     }
+
     /**
      * 遍历获取目录下的指定类型的文件
      * @param $path

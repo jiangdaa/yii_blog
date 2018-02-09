@@ -33,7 +33,7 @@ use yii\helpers\Url;
         <ul class="fa-ul blog-module-ul">
             <?php foreach ($categorys as $key => $category): ?>
                 <li><i class="fa-li fa fa-tag"></i><a
-                            href="<?= Url::to(['category/articles', 'cid' => $key]) ?>"><?= $category ?></a>
+                            href="<?= Url::to(['index/category', 'cid' => $key]) ?>"><?= $category ?></a>
                 </li>
             <?php endforeach ?>
         </ul>
@@ -44,7 +44,7 @@ use yii\helpers\Url;
             <?php if (!empty($recommends)): ?>
                 <?php foreach ($recommends as $recommends): ?>
                     <li><i class="fa-li fa fa-hand-o-right"></i>
-                        <a href="<?= Url::to(['article/detail', 'aid' => $recommends['id']]) ?>">
+                        <a href="<?= Url::to(['index/detail', 'aid' => $recommends['id']]) ?>">
                             <?= $recommends['title'] ?>
                         </a>
                     </li>

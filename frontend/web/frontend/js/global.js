@@ -1,7 +1,14 @@
 ﻿layui.use(['element', 'layer', 'util', 'form'], function () {
     var $ = layui.jquery;
-    //模拟QQ登陆
-    $('.blog-user').click(function () {
+    //用户菜单
+    $('#userInfo').hover(function () {
+        $('.user-nav').stop(true).slideDown(300);
+    }, function () {
+        $('.user-nav').stop(true).slideUp(300);
+    });
+
+    //弹出登陆/登陆窗口
+    $('#unLogin>.blog-user').click(function () {
 
         var defaultWidth = '60vh';
         if ((window.document.body.clientWidth) < 500) {
@@ -15,16 +22,8 @@
             area: [defaultWidth, '70%'],
             content: '/index/login.html' //iframe的url
         });
-
-
-        //layer.msg('暂未开放');
-        // var user = this;
-        // var index = layer.load(1);
-        // setTimeout(function () {
-        //     layer.close(index);
-        //     $(user).toggleClass('layui-hide').siblings('a.blog-user').toggleClass('layui-hide');
-        // }, 800);
     });
+
     //分享工具
     layui.util.fixbar({
         bar1: '&#xe641;',
@@ -57,25 +56,30 @@
             leftOut();
         }
     });
+
     //侧边导航遮罩点击事件
     $('.blog-mask').click(function () {
         leftOut();
     });
+
     //blog-body和blog-footer点击事件，用来关闭百度分享和类别导航
     $('.blog-body,.blog-footer').click(function () {
         shareOut();
         categoryOut();
     });
+
     //类别导航开关点击事件
     $('.category-toggle').click(function (e) {
         e.stopPropagation();    //阻止事件冒泡
         categroyIn();
     });
     //类别导航点击事件，用来关闭类别导航
+
     $('.article-category').click(function () {
         categoryOut();
     });
     //具体类别点击事件
+
     $('.article-category > a').click(function (e) {
         e.stopPropagation(); //阻止事件冒泡
     });
@@ -155,7 +159,6 @@
     }
 
 });
-
 
 //百度分享插件
 window._bd_share_config = {

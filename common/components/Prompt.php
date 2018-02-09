@@ -3,25 +3,38 @@
 namespace common\components;
 
 use yii\base\Component;
+use yii\helpers\Url;
 
-// js 提示
+/**
+ * -------------------------------------------
+ *
+ * @class Component 封装layer常用的js代码
+ *
+ * -------------------------------------------
+ */
 class Prompt extends Component
 {
 
-
+    /**
+     * -------------------------------------------
+     * pager  jsString  layer JS 代码
+     * @param array $config 配置
+     * @return string
+     * -------------------------------------------
+     */
     public function jsString($config = [])
     {
 
         $flash = \yii::$app->session;
         $info = $flash->hasFlash('info');
         $error = $flash->hasFlash('error');
-
         $successMsg = empty($config['successMsg']) ? $flash->getFlash('info') : $config['successMsg'];
         $errorMsg = empty($config['errorMsg']) ? $flash->getFlash('error') : $config['errorMsg'];
         $time = empty($config['time']) ? '2000' : $config['time'];
         $appendJs = empty($config['appendJs']) ? '' : $config['appendJs'];
         $upload = '';
         $use = '';
+        $confirmDel = '';
         if (!empty($config['upload'])) {
             $config['upload']['use'] = 'upload';
             $use = $config['upload']['use'];
@@ -31,7 +44,6 @@ class Prompt extends Component
                 url: '{$config['upload']['url']}',
                 field:'{$config['upload']['field']}',
                 done: function(res){
-                   console.log(res);
                    if(res.success){
                         $('{$config['upload']['cover']}').attr('src',res.savePath);
                         $('{$config['upload']['coverPath']}').val(res.savePath);
@@ -45,6 +57,30 @@ class Prompt extends Component
                 }
               });";
         }
+
+        if (!empty($config['confirmDel'])) {
+            $config['confirmDel']['msg'] = empty($config['confirmDel']['msg']) ? '选项' : $config['confirmDel']['msg'];
+            $frameId = \yii::$app->request->get('iframe-id');
+            $delUrl = $config['confirmDel']['url'];
+            $idtype = empty($config['confirmDel']['attrId']) ? 'sid' : $config['confirmDel']['attrId'];
+            $confirmDel = " 
+                var iframe = $('iframe',window.parent.document);
+                $('.delete').on('click',function(){
+                    var id = $(this).attr('{$idtype}');
+                    layer.confirm('确定删除该{$config['confirmDel']['msg']}？', {
+                      btn: ['确定','取消']
+                    }, function(){
+                        $.each(iframe,function(i){
+                            if(iframe.eq(i).attr('iframe-id')=='{$frameId}'){
+                       
+                               iframe.eq(i).attr('src','{$delUrl}?ifrid={$frameId}&{$idtype}='+id);
+                            }
+                        });
+                    });
+                });";
+        }
+
+
         $jsTemplate = " 
             var useArr = ['form','element','jquery'];
             var condition = '{$use}';
@@ -66,6 +102,8 @@ class Prompt extends Component
               {$appendJs}
               //--上传部分--
               {$upload}
+              //--确认删除--
+              {$confirmDel}
               
         })";
         return $jsTemplate;

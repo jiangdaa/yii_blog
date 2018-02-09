@@ -4,8 +4,14 @@ namespace frontend\assets;
 
 use yii\web\AssetBundle;
 
+
 /**
- * Main backend application asset bundle.
+ * -------------------------------------------
+ *
+ * Class EmptyAsset 空模版资源管理
+ * @package common\components
+ *
+ * -------------------------------------------
  */
 class EmptyAsset extends AssetBundle
 {

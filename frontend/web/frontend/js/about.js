@@ -1,22 +1,14 @@
-﻿/*
-
-@Name：不落阁整站模板源码 
-@Author：Absolutely 
-@Site：http://www.lyblogs.cn
-
-*/
-
-layui.use(['element', 'jquery', 'form', 'layedit'], function () {
+﻿layui.use(['element', 'jquery', 'form', 'layedit'], function () {
     var element = layui.element;
     var form = layui.form;
     var $ = layui.jquery;
     var layedit = layui.layedit;
-
     //评论和留言的编辑器
     var editIndex = layedit.build('remarkEditor', {
         height: 150,
         tool: ['face', '|', 'left', 'center', 'right', '|', 'link'],
     });
+
     //评论和留言的编辑器的验证
     layui.form.verify({
         content: function (value) {
@@ -32,7 +24,6 @@ layui.use(['element', 'jquery', 'form', 'layedit'], function () {
         element.tabChange('tabAbout', 1);
     }
     element.tabChange('tabAbout', layid);
-
     element.on('tab(tabAbout)', function (elem) {
         location.hash = 'tabIndex=' + $(this).attr('lay-id');
     });
@@ -40,37 +31,95 @@ layui.use(['element', 'jquery', 'form', 'layedit'], function () {
     //监听留言提交
     form.on('submit(formLeaveMessage)', function (data) {
         var index = layer.load(1);
-        //模拟留言提交
-        setTimeout(function () {
+        data.field.uid = window.localStorage.getItem('uid');
+        $.post('/request/leave-msg.html', data.field, function (res) {
+            var res = JSON.parse(res);
+            if (res.error === '0') {
+                setTimeout(function () {
+                    var content = res.data.leave_msg;
+                    var replyTime = res.data.leave_msg_time;
+                    var nickName = res.data.nick_name;
+                    var portrait = res.data.portrait;
+                    var pid = res.data.id;
+                    var html = ` <li>
+                                    <div class="comment-parent">
+                                        <img src="${portrait}"/>
+                                        <div class="info" style="padding-top:20px;">
+                                            <span class="username">${nickName}</span>
+                                        </div>
+                                        <div class="content"><br>${content}</div>
+                                        <p class="info info-footer">
+                                            <span class="time">${replyTime}</span>
+                                            <a class="btn-reply"href="javascript:;" onclick="btnReplyClick(this)">回复</a>
+                                        </p>
+                                    </div>
+                                    <hr>
+                                    <div class="replycontainer layui-hide">
+                                        <form class="layui-form"action="">
+                                            <div class="layui-form-item">
+                                                <input type="text" class="layui-input" name="pid" value="${pid}">
+                                                <textarea name="leave_msg" lay-verify="replyContent" placeholder="请输入回复内容" class="layui-textarea" style="min-height:80px;"></textarea>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <button class="layui-btn layui-btn-mini"lay-submit="formReply"lay-filter="formReply">提交</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </li>`;
+                    $('.blog-comment').append(html);
+                    $('#remarkEditor').val('');
+                    editIndex = layui.layedit.build('remarkEditor', {
+                        height: 150,
+                        tool: ['face', '|', 'left', 'center', 'right', '|', 'link'],
+                    });
+                    layer.msg("留言成功", {icon: 1});
+                }, 500);
+            } else {
+                layer.msg(res.msg, {icon: 2});
+
+            }
             layer.close(index);
-            var content = data.field.editorContent;
-            var html = '<li><div class="comment-parent"><img src="../images/Logo_40.png"alt="模拟留言"/><div class="info"><span class="username">模拟留言</span></div><div class="content">' + content + '</div><p class="info info-footer"><span class="time">2017-03-18 18:09</span><a class="btn-reply"href="javascript:;" onclick="btnReplyClick(this)">回复</a></p></div><!--回复表单默认隐藏--><div class="replycontainer layui-hide"><form class="layui-form"action=""><div class="layui-form-item"><textarea name="replyContent"lay-verify="replyContent"placeholder="请输入回复内容"class="layui-textarea"style="min-height:80px;"></textarea></div><div class="layui-form-item"><button class="layui-btn layui-btn-mini"lay-submit="formReply"lay-filter="formReply">提交</button></div></form></div></li>';
-            $('.blog-comment').append(html);
-            $('#remarkEditor').val('');
-            editIndex = layui.layedit.build('remarkEditor', {
-                height: 150,
-                tool: ['face', '|', 'left', 'center', 'right', '|', 'link'],
-            });
-            layer.msg("留言成功", { icon: 1 });
-        }, 500);
+        });
         return false;
     });
 
     //监听留言回复提交
     form.on('submit(formReply)', function (data) {
-        var index = layer.load(1);
-        //模拟留言回复
-        setTimeout(function () {
-            layer.close(index);
-            var content = data.field.replyContent;
-            var html = '<div class="comment-child"><img src="../images/Absolutely.jpg"alt="Absolutely"/><div class="info"><span class="username">模拟回复</span><span>' + content + '</span></div><p class="info"><span class="time">2017-03-18 18:26</span></p></div>';
-            $(data.form).find('textarea').val('');
-            $(data.form).parent('.replycontainer').before(html).siblings('.comment-parent').children('p').children('a').click();
-            layer.msg("回复成功", { icon: 1 });
-        }, 500);
+        data.field.uid = window.localStorage.getItem('uid');
+        $.post('/request/reply.html', data.field, function (res) {
+            var index = layer.load(1);
+            var res = JSON.parse(res);
+            setTimeout(function () {
+                layer.close(index);
+                var content = res.data.leave_msg;
+                var replyTime = res.data.leave_msg_time;
+                var nickName = res.data.nick_name;
+                var portrait = res.data.portrait || 'http://yii.bgadmin.cn/backend/images/default-head.jpg';
+                var html = `
+                    <div class="comment-child">
+                        <img src="${portrait}" />
+                        <div class="info">
+                            <span class="username">${nickName}</span>
+                            <span>${content}</span>
+                        </div>
+                        <p class="info">
+                            <span class="time">${replyTime}</span>
+                        </p>
+                    </div>
+                    <hr>
+                `;
+
+                $(data.form).find('textarea').val('');
+                $(data.form).parent('.replycontainer').before(html).siblings('.comment-parent').children('p').children('a').click();
+                layer.msg("回复成功", {icon: 1});
+            }, 500);
+        });
+
+
         return false;
     });
 });
+
 function btnReplyClick(elem) {
     var $ = layui.jquery;
     $(elem).parent('p').parent('.comment-parent').siblings('.replycontainer').toggleClass('layui-hide');
@@ -80,6 +129,7 @@ function btnReplyClick(elem) {
         $(elem).text('回复')
     }
 }
+
 systemTime();
 
 function systemTime() {
@@ -91,14 +141,9 @@ function systemTime() {
     var hh = dateTime.getHours();
     var mm = dateTime.getMinutes();
     var ss = dateTime.getSeconds();
-
-    //分秒时间是一位数字，在数字前补0。
     mm = extra(mm);
     ss = extra(ss);
-
-    //将时间显示到ID为time的位置，时间格式形如：19:18:02
     document.getElementById("time").innerHTML = year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
-    //每隔1000ms执行方法systemTime()。
     setTimeout("systemTime()", 1000);
 }
 

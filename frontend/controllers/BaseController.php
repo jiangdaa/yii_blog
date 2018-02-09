@@ -4,18 +4,29 @@ namespace frontend\controllers;
 
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use \common\models\BloggerInfo;
+use \common\models\SiteConfig;
+use \common\models\Link;
 
 class BaseController extends Controller
 {
-
+    // -不用登录能执行的方法
     public $noMustCheck = [];
+    // -需要登录才能执行的方法
     public $mustCheck = [];
 
+    /**
+     * -------------------------------------------
+     * behaviors 行为
+     * @return array
+     * -------------------------------------------
+     */
     public function behaviors()
     {
-        \yii::$app->params['bloggerInfo'] = \common\models\BloggerInfo::find()->limit(1)->asArray()->one();
-        \yii::$app->params['siteConfig'] = \common\models\SiteConfig::find()->where(['id' => '1'])->asArray()->one();
-        \yii::$app->params['link'] = \common\models\Link::find()->asArray()->all();
+        $app = \yii::$app;
+        $app->params['bloggerInfo'] = BloggerInfo::find()->limit(1)->asArray()->one();
+        $app->params['siteConfig'] = SiteConfig::find()->where(['id' => '1'])->asArray()->one();
+        $app->params['link'] = Link::find()->asArray()->all();
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -30,7 +41,6 @@ class BaseController extends Controller
                         'actions' => $this->mustCheck,
                         'roles' => ['@']
                     ],
-
                 ]
             ]
         ];

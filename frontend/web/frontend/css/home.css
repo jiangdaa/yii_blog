@@ -1,12 +1,4 @@
-﻿/*
-
-@Name：不落阁整站模板源码 
-@Author：Absolutely 
-@Site：http://www.lyblogs.cn
-
-*/
-
-/*博主信息*/
+﻿/*博主信息*/
 .blogerinfo {
     text-align: center;
     padding: 0 15px;
@@ -71,3 +63,25 @@
 }
 
 /*一路走来和后台记录END*/
+
+/*-----用户信息-----*/
+.user-nav {
+    background: #393D49;
+    width: 100px;
+    position: absolute;
+    right: 0;
+    top: 60px;
+    display: none;
+}
+
+.user-nav ol li {
+    line-height: 30px;
+    border-bottom: 1px solid #fff;
+    padding: 3px;
+}
+
+.user-nav ol li a {
+    color: rgba(255, 255, 255, .7);
+}
+
+/*-----用户信息END-----*/

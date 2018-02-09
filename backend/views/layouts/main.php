@@ -11,7 +11,7 @@ $this->registerCss("
         color:red;
     }
 ");
-$this->registerJs(yii::$app->Prompt->jsString());
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

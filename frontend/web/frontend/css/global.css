@@ -67,7 +67,22 @@ body {
     width: 100%;
     float: right;
 }
+@media (max-width: 768px) and (min-width:200px){
+    .user-box {
+        padding-top:10px;
+        z-index: 9999;
+        position: absolute;
+        left: 0;
+    }
+    .user-box > .user-name{
+        color:red;float: right;margin-rigth:60px;line-height: 50px;padding-left: 10px;
+    }
 
+    .user-box> .user-head-img{
+        border-radius:50%;  width: 50px;height: 50px;float: right;
+    }
+
+}
 /* 小屏幕（平板，大于等于 768px） */
 @media (min-width: 768px) {
     .blog-container {
@@ -95,6 +110,21 @@ body {
         float: right;
         clear: right;
     }
+
+    .user-box {
+        padding-top:10px;
+        z-index: 9999;
+        position: absolute;
+        left: 0;
+    }
+    .user-box > .user-name{
+        color:red;float: right;margin-rigth:60px;line-height: 50px;padding-left: 10px;
+    }
+
+    .user-box> .user-head-img{
+        border-radius:50%;  width: 50px;height: 50px;float: right;
+    }
+
 }
 
 /* 中等屏幕（桌面显示器，大于等于 992px） */
@@ -115,12 +145,40 @@ body {
         width: auto;
         float: none !important;
     }
+    .user-box{
+        padding-top:10px;
+        z-index: 9999;
+        position: absolute;
+        right: 0px;
+    }
+
+    .user-box > .user-name{
+        color:red;float: right;margin-rigth:60px;line-height: 50px;padding-left: 10px;
+    }
+
+    .user-box> .user-head-img{
+        border-radius:50%;  width: 50px;height: 50px;float: right;
+    }
 }
 
 /* 大屏幕（大桌面显示器，大于等于 1200px） */
 @media (min-width: 1200px) {
     .blog-container {
         width: 1170px;
+    }
+    .user-box{
+        padding-top:10px;
+        z-index: 9999;
+        position: absolute;
+        right: 0px;
+    }
+
+    .user-box > .user-name{
+        color:red;float: right;margin-rigth:60px;line-height: 50px;padding-left: 10px;
+    }
+
+    .user-box> .user-head-img{
+        border-radius:50%;  width: 50px;height: 50px;float: right;
     }
 }
 
@@ -267,6 +325,7 @@ body {
     .blog-nav-left {
         display: none !important;
     }
+
 }
 
 /* 顶部导航End */

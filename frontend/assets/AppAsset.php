@@ -5,7 +5,12 @@ namespace frontend\assets;
 use yii\web\AssetBundle;
 
 /**
- * Main backend application asset bundle.
+ * -------------------------------------------
+ *
+ * Class AppAsset 前端资源管理
+ * @package common\components
+ *
+ * -------------------------------------------
  */
 class AppAsset extends AssetBundle
 {
@@ -13,16 +18,16 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         '/frontend/css/global.css',
-        '/frontend/font-awesome/css/font-awesome.min.css',
+        '/frontend/plugins/font-awesome/css/font-awesome.min.css',
         '/frontend/css/animate.min.css',
-        '/frontend/background/rain/css/reset.min.css',
-        '/frontend/background/rain/css/style.css',
+        '/frontend/plugins/rain/css/reset.min.css',
+        '/frontend/plugins/rain/css/style.css',
 
     ];
     public $js = [
         '/frontend/js/global.js',
-        '/frontend/background/rain/js/dat.gui.min.js',
-        '/frontend/background/rain/js/index.js'
+        '/frontend/plugins/rain/js/dat.gui.min.js',
+        '/frontend/plugins/rain/js/index.js'
 
     ];
     public $depends = [

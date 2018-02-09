@@ -11,10 +11,14 @@ use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
 
-/*
- * 内容管理类
+/**
+ * -------------------------------------------
+ *
+ * Class ContentManagerController  内容管理类
+ * @package backend\controllers
+ *
+ * -------------------------------------------
  */
-
 class ContentManagerController extends BaseController
 {
     public $enableCsrfValidation = false;
@@ -22,39 +26,35 @@ class ContentManagerController extends BaseController
     public function actions()
     {
         return [
-            'ueditor' => [
-                'class' => 'common\widgets\ueditor\UeditorAction',
-                'config' => [
-                    'imageUrlPrefix' => "",
-                    'imagePathFormat' => "/image/{yyyy}{mm}{dd}/{time}{rand:6}",
-                ]
-            ]
+            'ueditor' => \yii::$app->Gather->ueditorCfg()
         ];
     }
 
+    /**
+     *-------------------------------------------
+     * actionUpload 上传图片
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionUpload()
     {
-        $model = '';
+        $model = null;
         switch (yii::$app->request->get('cName')) {
             case 'Article':
                 $model = new Article();
                 break;
             case 'Share':
                 $model = new Share();
-
                 break;
         }
         if (Yii::$app->request->isPost) {
-
             $model->scenario = 'upload';
             $model->file = UploadedFile::getInstance($model, 'file');
-
             if ($model->file && $model->validate()) {
-
                 $today = date('Y-m-d');
                 $filename = $model->file->baseName . '.' . $model->file->extension;
-                $savePath = Url::base(true) . '/blog_cover/' . $today . '/' . $filename;
-                $dir = dirname(dirname(__FILE__)) . '/web/blog_cover/' . $today . '/';
+                $savePath = Url::base(true) . '/backend/blog_cover/' . $today . '/' . $filename;
+                $dir = dirname(dirname(__FILE__)) . '/web/backend/blog_cover/' . $today . '/';
                 if (!file_exists($dir)) {
                     mkdir($dir);
                 }
@@ -73,9 +73,14 @@ class ContentManagerController extends BaseController
         }
     }
 
+    /**
+     *-------------------------------------------
+     * actionUpload 渲染文章列表页面
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionArticle()
     {
-
         $gridData = new ActiveDataProvider([
             'query' => (new Query)
                 ->select('a.id,a.title,a.stick,a.recommend,a.count,a.praise,a.author,c.name,a.issuetime,a.updatetime,a.state')
@@ -87,14 +92,17 @@ class ContentManagerController extends BaseController
                 'pageSize' => 15
             ]
         ]);
-
-
         return $this->render('article', ['gridData' => $gridData]);
     }
 
+    /**
+     *-------------------------------------------
+     * actionAddArticle 渲染添加文章页面
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionAddArticle()
     {
-
         $model = new Article;
         $request = yii::$app->request;
         $post = $request->post();
@@ -107,15 +115,20 @@ class ContentManagerController extends BaseController
         $model->recommend = 0;
         $model->state = 0;
         $model->stick = 0;
-
-        return $this->render('add-article.php', [
+        return $this->render('article-add', [
             'model' => $model,
             'categoryList' => Category::getAllCategory(),
             'error' => $model->getErrors()
         ]);
     }
 
-
+    /**
+     *-------------------------------------------
+     * actionEditArticle 渲染编辑文章页面
+     * @return mixed
+     * @throws \Exception
+     * -------------------------------------------
+     */
     public function actionEditArticle()
     {
         $aid = (int)yii::$app->request->get('aid');
@@ -134,9 +147,16 @@ class ContentManagerController extends BaseController
                 }
             }
         }
-        return $this->render('edit-article', ['model' => $article, 'categoryList' => Category::getAllCategory(),]);
+        return $this->render('article-edit', ['model' => $article, 'categoryList' => Category::getAllCategory(),]);
     }
 
+    /**
+     *-------------------------------------------
+     * actionDeleteArticle 渲染文章删除页面
+     * @return mixed
+     * @throws \Exception
+     * -------------------------------------------
+     */
     public function actionDeleteArticle()
     {
         $aid = (int)yii::$app->request->get('aid');
@@ -152,6 +172,12 @@ class ContentManagerController extends BaseController
         }
     }
 
+    /**
+     *-------------------------------------------
+     * actionCategory 渲染文章分类页面
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionCategory()
     {
 
@@ -163,12 +189,17 @@ class ContentManagerController extends BaseController
                 yii::$app->session->setFlash('info', '分类添加成功');
                 $categorys = $model->find()->all();
             }
-
         }
-
         return $this->render('category', ['model' => $model, 'categorys' => $categorys]);
     }
 
+    /**
+     *-------------------------------------------
+     * actionDeleteCategory 删除文章分类页面
+     * @return mixed
+     * @throws \Exception
+     * -------------------------------------------
+     */
     public function actionDeleteCategory()
     {
         $model = new Category;
@@ -185,20 +216,84 @@ class ContentManagerController extends BaseController
             }
         }
         return $this->redirect(['category']);
-
     }
 
-
+    /**
+     *-------------------------------------------
+     * actionShare 渲染工具分享页面
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionShare()
     {
-
-        return $this->render('share', []);
+        $gridData = new ActiveDataProvider([
+            'query' => Share::find(),
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+        return $this->render('share', ['gridData' => $gridData]);
     }
 
+    /**
+     *-------------------------------------------
+     * actionEditShare 渲染编辑工具分享页面
+     * @return mixed
+     * @throws \Exception
+     * -------------------------------------------
+     */
+    public function actionEditShare()
+    {
+        $category = (new Category)->getAllCategory('true', ['type' => 'share']);
+        $model = new Share;
+        $sid = (int)\yii::$app->request->get('sid');
+        if (empty($sid)) {
+            throw new \Exception('参数错误');
+        }
+        $post = \yii::$app->request->post();
+        if ($model->load($post) && $model->validate()) {
+            unset($post['Share']['file']);
+            if ($model->updateAll($post['Share'], ['id' => $sid])) {
+                \yii::$app->session->setFlash('info', '编辑成功');
+                return $this->redirect('share');
+            }
+        }
+        return $this->render('share-edit', ['model' => $model->findOne($sid), 'category' => $category]);
+    }
+
+    /**
+     *-------------------------------------------
+     * actionDelShare 渲染工具分享页面
+     * @return mixed
+     * @throws \Exception
+     * -------------------------------------------
+     */
+    public function actionDelShare()
+    {
+        $sid = (int)\yii::$app->request->get('sid');
+        $ifrid = (int)yii::$app->request->get('ifrid');
+        if (empty($sid)) {
+            throw new \Exception('参数错误');
+        }
+        if (Share::deleteAll(['id' => $sid])) {
+            \yii::$app->session->setFlash('info', '删除成功');
+        } else {
+            \yii::$app->session->setFlash('error', '删除失败,请重新尝试下');
+        }
+        return $this->redirect(['share?iframe-id=' . $ifrid]);
+    }
+
+
+    /**
+     *-------------------------------------------
+     * actionShare 渲染工具添加页面
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionShareAdd()
     {
         $model = new Share;
-        $category = (new Category)->getAllCategory('true',['type'=>'share']);
+        $category = (new Category)->getAllCategory('true', ['type' => 'share']);
         if (yii::$app->request->isPost) {
             $post = yii::$app->request->post();
             if ($model->addShare($post)) {
@@ -206,20 +301,31 @@ class ContentManagerController extends BaseController
             } else {
                 yii::$app->session->setFlash('info', '添加资源失败');
             }
-        }
 
+        }
         return $this->render('share-add', [
             'model' => $model,
-            'category'=>$category
+            'category' => $category
         ]);
     }
 
-
+    /**
+     *-------------------------------------------
+     * actionTimeline 渲染时光轴页面
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionTimeline()
     {
         echo '时光轴';
     }
 
+    /**
+     *-------------------------------------------
+     * actionTimeline 渲染文章回收站页面
+     * @return mixed
+     * -------------------------------------------
+     */
     public function actionRecycle()
     {
 

@@ -20,7 +20,7 @@ $config = [
             'class' => 'common\components\Gather'
         ],
         'request' => [
-            'csrfParam' => '_csrf-frontend',
+            'csrfParam' => '_csrf-frontend'
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -53,8 +53,13 @@ $config = [
                 'home' => 'index/index',
                 'about' => 'index/about',
                 'share' => 'index/share',
-                'categorys/<cid:\d+>' => 'category/articles',
+                'logout' => 'index/logout',
+                'user' => 'index/user',
+                'articles' => 'index/articles',
+                'category/<cid:\d+>' => 'index/category',
                 'post/<aid:\d+>' => 'index/detail',
+
+
             ],
         ],
         'mailer' => [
@@ -77,10 +82,10 @@ $config = [
     ],
     'params' => $params,
 ];
-$config['bootstrap'][] = 'debug';
+/*$config['bootstrap'][] = 'debug';
 $config['modules']['debug'] = [
     'class' => 'yii\debug\Module',
     // uncomment the following to add your IP if you are not connecting from localhost.
     //'allowedIPs' => ['127.0.0.1', '::1'],
-];
+];*/
 return $config;
