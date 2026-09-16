@@ -3,8 +3,8 @@ return [
     'adminEmail' => 'admin@example.com',
     'supportEmail' => 'support@example.com',
     'user.passwordResetTokenExpire' => 3600,
-    'defaultCover' => 'http://yii.bgadmin.cn/backend/images/default-cover.jpg',
-    'defaultHeadImg' => 'http://yii.bgadmin.cn/backend/images/default-head.jpg',
+    'defaultCover' => '/frontend/images/cover/cover_default.jpg',
+    'defaultHeadImg' => '/frontend/default_portrait/avatar_1_03.png',
     'pageSize' => 10
 
 
