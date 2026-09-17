@@ -1,0 +1,234 @@
+/* 后台管理页样式（原文件未提交到仓库，此为兼容实现） */
+body {
+    margin: 0;
+    background: #F4F6F9;
+    font-family: "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+}
+
+/* ---------- 布局骨架 ---------- */
+.layui-layout-admin .layui-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: #23262E;
+    color: #c2c2c2;
+    z-index: 1000;
+}
+
+.layui-layout-admin .layui-side {
+    position: fixed;
+    top: 60px; bottom: 0; left: 0;
+    width: 200px;
+    background: #393D49;
+    overflow-x: hidden;
+    z-index: 999;
+}
+
+.layui-layout-admin .layui-side-scroll {
+    width: 220px;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+.layui-layout-admin .layui-body {
+    position: fixed;
+    top: 60px; bottom: 44px; left: 200px; right: 0;
+    overflow: auto;
+}
+
+.layui-layout-admin .layui-footer {
+    position: fixed;
+    bottom: 0; left: 200px; right: 0;
+    height: 44px;
+    background: #EEEEEE;
+}
+
+/* ---------- 顶部区域 ---------- */
+.ht-console {
+    float: left;
+    height: 60px;
+}
+
+.ht-user {
+    padding: 10px 15px;
+}
+
+.ht-user img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.ht-user .ht-user-name {
+    color: #c2c2c2;
+    font-size: 14px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.sys-title {
+    position: absolute;
+    left: 50%;
+    margin-left: -140px;
+    line-height: 60px;
+    font-size: 16px;
+    color: #fff;
+}
+
+.ht-nav {
+    float: right;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ht-nav .ht-nav-item {
+    float: left;
+    line-height: 60px;
+    padding: 0 15px;
+}
+
+.ht-nav .ht-nav-item a {
+    color: #c2c2c2;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.ht-nav .ht-nav-item a:hover {
+    color: #fff;
+}
+
+/* ---------- 侧边导航 ---------- */
+.layui-side .layui-nav {
+    background: none;
+    border-radius: 0;
+}
+
+.layui-side .layui-nav-item a {
+    color: #c2c2c2;
+}
+
+/* ---------- 收起导航按钮 ---------- */
+.layui-side-hide {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+/* ---------- 标签页/内容 ---------- */
+.layui-layout-admin .layui-tab {
+    margin: 0;
+}
+
+.layui-layout-admin .layui-tab-content {
+    height: 100%;
+    padding: 0;
+}
+
+.layui-layout-admin .layui-tab-item {
+    height: 100%;
+}
+
+/* ---------- 仪表盘统计块 ---------- */
+.ht-box {
+    display: inline-block;
+    width: 200px;
+    height: 80px;
+    margin: 8px;
+    border-radius: 4px;
+    color: #fff;
+    padding: 15px;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+
+/* ---------- 快捷菜单瓦片 ---------- */
+.windows-tile {
+    display: inline-block;
+    width: 160px;
+    height: 100px;
+    margin: 8px;
+    background: #009688;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 25px;
+    box-sizing: border-box;
+}
+
+.windows-tile i {
+    display: block;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.windows-tile span {
+    display: block;
+    font-size: 14px;
+}
+
+.short-menu {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 998;
+    padding: 20px 0;
+}
+
+/* ---------- 个性化面板 ---------- */
+.individuation {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 300px;
+    bottom: 0;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    padding: 15px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.individuation .setting-title {
+    font-weight: bold;
+    margin: 15px 0 8px;
+    border-left: 3px solid #009688;
+    padding-left: 8px;
+}
+
+.individuation .setting-item {
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.individuation .explain {
+    color: #999;
+}
+
+/* ---------- 表单/表格兼容 ---------- */
+.pm-form .layui-form-label {
+    width: 110px;
+}
+
+.pm-form .layui-input-block {
+    margin-left: 140px;
+}
+
+.pm-table td, .pm-table th {
+    vertical-align: middle;
+}
+
+a.pm-btn, .pm-btn {
+    cursor: pointer;
+}

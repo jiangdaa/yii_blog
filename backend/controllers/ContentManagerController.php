@@ -85,7 +85,7 @@ class ContentManagerController extends BaseController
             'query' => (new Query)
                 ->select('a.id,a.title,a.stick,a.recommend,a.count,a.praise,a.author,c.name,a.issuetime,a.updatetime,a.state')
                 ->from('{{%article}} as a')
-                ->where('a.existdel = 1')
+                ->where('a.existdel = 0')
                 ->leftjoin('{{%category}} as c', 'a.category = c.id')
                 ->orderBy('issuetime desc'),
             'pagination' => [

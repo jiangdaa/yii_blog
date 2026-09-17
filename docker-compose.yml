@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "8080:8080"   # frontend (博客前台)
+      - "8081:8081"   # backend (管理后台)
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: yii2advanced
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./deploy/init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    restart: unless-stopped
+
+volumes:
+  db_data:
