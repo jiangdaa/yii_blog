@@ -12,10 +12,14 @@ layui.define(['element', 'layer', 'jquery', 'form'], function (exports) {
     var TAB_FILTER = 'tab';
 
     function openTab(url, title, id) {
-        if (!url || url === 'javascript:;' || url === '#') {
+        if (!url || url === 'javascript:;' || url === '#' || url.indexOf('javascript') === 0) {
             return;
         }
         id = id || url;
+        // data-id 模板占位符未渲染时退化为 url，保证每个菜单唯一 tab
+        if (id === '{id}' || !id) {
+            id = url;
+        }
         var $title = $('.layui-tab-title li[lay-id="' + id + '"]');
         if ($title.length === 0) {
             element.tabAdd(TAB_FILTER, {
@@ -29,9 +33,13 @@ layui.define(['element', 'layer', 'jquery', 'form'], function (exports) {
 
     // 左侧导航点击 -> 打开/切换 iframe 标签页
     element.on('nav(leftnav)', function (elem) {
-        var url = elem.attr('data-url'),
-            id = elem.attr('data-id'),
-            title = $.trim(elem.text());
+        var $a = $(elem).is('a') ? $(elem) : $(elem).find('a').first();
+        if (!$a.length) {
+            $a = $(this).closest('a');
+        }
+        var url = $a.attr('data-url') || $a.attr('lay-href') || $a.attr('href'),
+            id = $a.attr('data-id'),
+            title = $.trim($a.text());
         openTab(url, title, id);
     });
 
@@ -43,18 +51,16 @@ layui.define(['element', 'layer', 'jquery', 'form'], function (exports) {
 
     // 收起/展开侧边导航
     $(document).on('click', '.layui-side-hide', function () {
-        var $layout = $('.layui-layout-admin');
-        $layout.toggleClass('pm-side-collapsed');
-        if ($layout.hasClass('pm-side-collapsed')) {
+        var $layout = $('.layui-layout-admin'),
+            collapsed = $layout.toggleClass('pm-side-collapsed').hasClass('pm-side-collapsed');
+        if (collapsed) {
             $('.layui-side').hide();
             $('.layui-body').css('left', '0');
             $(this).find('i').removeClass('fa-long-arrow-left').addClass('fa-long-arrow-right');
-            $(this).contents().last().replaceWith('展开导航');
         } else {
             $('.layui-side').show();
             $('.layui-body').css('left', '200px');
             $(this).find('i').removeClass('fa-long-arrow-right').addClass('fa-long-arrow-left');
-            $(this).contents().last().replaceWith('收起导航');
         }
     });
 
