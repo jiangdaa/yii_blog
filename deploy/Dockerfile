@@ -12,7 +12,10 @@ RUN sed -i 's|deb.debian.org|archive.debian.org|g; s|security.debian.org|archive
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:1.10 /usr/bin/composer /usr/bin/composer
+# 安装 composer 1.10（与 composer.lock 版本兼容；不走 docker hub 镜像，避免拉取失败）
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=1.10.27 \
+    && rm composer-setup.php
 
 WORKDIR /var/www/html
 COPY composer.json composer.lock ./
@@ -23,6 +26,18 @@ RUN php init --env=Development --overwrite=All \
     && sed -i "s/mysql:host=localhost/mysql:host=db/" common/config/main-local.php \
     && mkdir -p backend/web/assets frontend/web/assets backend/runtime frontend/runtime console/runtime \
     && chown -R www-data:www-data /var/www/html
+
+# backend/web/backend/ 在 .gitignore 中且从未提交 — 从已提交的前端资源恢复，并补齐缺失的 css/上传目录
+RUN mkdir -p backend/web/backend/plugins backend/web/backend/css \
+        backend/web/backend/images backend/web/backend/js \
+        backend/web/backend/blog_cover backend/web/backend/link_logo \
+    && cp -a frontend/web/frontend/plugins/layui backend/web/backend/plugins/layui \
+    && cp -a frontend/web/frontend/plugins/font-awesome backend/web/backend/plugins/font-awesome \
+    && cp frontend/web/frontend/css/animate.min.css backend/web/backend/plugins/animate.min.css \
+    && cp frontend/web/frontend/images/Logo_40.png backend/web/backend/images/Logo_40.png
+COPY deploy/backend-web/css/ backend/web/backend/css/
+COPY deploy/backend-web/js/ backend/web/backend/js/
+RUN chown -R www-data:www-data /var/www/html/backend/web/backend
 
 COPY deploy/vhosts.conf /etc/apache2/conf-enabled/zz-vhosts.conf
 COPY deploy/entrypoint.sh /usr/local/bin/blog-entrypoint

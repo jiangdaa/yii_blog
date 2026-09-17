@@ -1,0 +1,34 @@
+/* 后台管理页样式（原文件未提交到仓库，此为兼容样式） */
+body {
+    margin: 0;
+    background: #F4F6F9;
+    font-family: "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+}
+
+.pm-admin .layui-layout-admin .layui-header {
+    background: #23262E;
+}
+
+.pm-menu .layui-nav-tree {
+    width: 200px;
+}
+
+.pm-content {
+    padding: 15px;
+}
+
+.pm-form .layui-form-label {
+    width: 110px;
+}
+
+.pm-form .layui-input-block {
+    margin-left: 140px;
+}
+
+.pm-table td, .pm-table th {
+    vertical-align: middle;
+}
+
+a.pm-btn, .pm-btn {
+    cursor: pointer;
+}

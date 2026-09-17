@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS `migration` (
 
 INSERT IGNORE INTO `migration` (`version`, `apply_time`) VALUES
   ('m130524_201442_init', UNIX_TIMESTAMP()),
-  ('m180209_141808_user_log', UNIX_TIMESTAMP());
+  ('m180209_141808_user_log', UNIX_TIMESTAMP()),
+  ('m140506_102106_rbac_init', UNIX_TIMESTAMP()),
+  ('m170907_052038_rbac_add_index_on_auth_assignment_user_id', UNIX_TIMESTAMP());
 
 -- ---------- 后台管理员 ----------
 CREATE TABLE IF NOT EXISTS `admin` (
@@ -47,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- 前台演示账号: demo@blog.local / demo123
 INSERT IGNORE INTO `user` (`id`, `user_name`, `email`, `password`, `nick_name`, `portrait`, `created_time`, `state`) VALUES
-  (1, 'demo@blog.local', 'demo@blog.local', SHA1(CONCAT(MD5('demo123'), 'David')), 'Demo用户', '', NOW(), '0');
+  (1, 'demo@blog.local', 'demo@blog.local', SHA1(CONCAT(MD5('demo123'), 'David')), 'Demo用户', '/frontend/default_portrait/avatar_1_03.png', NOW(), '0');
 
 -- ---------- 分类（type: category=文章分类, share=分享分类）----------
 CREATE TABLE IF NOT EXISTS `category` (
@@ -180,6 +182,100 @@ CREATE TABLE IF NOT EXISTS `blogger_info` (
 
 INSERT IGNORE INTO `blogger_info` (`id`, `blogger_name`, `blogger_signature`, `blogger_address`, `qq`, `email`, `github`, `weibo`) VALUES
   (1, '博主', 'Stay hungry, stay foolish.', '', '', '', '', '');
+
+-- ---------- RBAC：角色/权限种子（admin id=1 拥有全部权限，后台菜单才能显示）----------
+-- auth_* 表由 yii rbac 迁移创建，这里预创建以兼容 initdb 先于迁移执行的顺序
+CREATE TABLE IF NOT EXISTS `auth_rule` (
+  `name` varchar(64) NOT NULL,
+  `data` blob,
+  `created_at` int(11),
+  `updated_at` int(11),
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `auth_item` (
+  `name` varchar(64) NOT NULL,
+  `type` smallint(6) NOT NULL,
+  `description` text,
+  `rule_name` varchar(64),
+  `data` blob,
+  `created_at` int(11),
+  `updated_at` int(11),
+  PRIMARY KEY (`name`),
+  KEY `idx-auth_item-type` (`type`),
+  CONSTRAINT `auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `auth_item_child` (
+  `parent` varchar(64) NOT NULL,
+  `child` varchar(64) NOT NULL,
+  PRIMARY KEY (`parent`, `child`),
+  CONSTRAINT `auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `auth_assignment` (
+  `item_name` varchar(64) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
+  `created_at` int(11),
+  PRIMARY KEY (`item_name`, `user_id`),
+  KEY `auth_assignment_user_id_idx` (`user_id`),
+  CONSTRAINT `auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT IGNORE INTO `auth_item` (`name`, `type`, `created_at`, `updated_at`) VALUES
+  ('admin', 1, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('admin/main', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('admin/member-manager', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('admin-log/index', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('admin-log/view', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('consumer-manager/backend-consumer', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('consumer-manager/frontend-consumer', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('consumer-manager/blacklist', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('consumer-manager/user-delete', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/s', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/upload', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/article', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/add-article', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/edit-article', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/delete-article', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/category', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/delete-category', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/share', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/edit-share', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/del-share', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/share-add', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/timeline', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('content-manager/recycle', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('error/error', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/s', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/upload', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/announcement', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/dis-disable', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/add', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/blogger-info', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/site-config', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/link', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/link-delete', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/link-add', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/link-edit', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/leave-msg', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/msg-delete', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/reply-msg', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('extension/log', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('login/s', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('login/logout', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('permissions-manager/add-role', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('permissions-manager/role-list', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('permissions-manager/assign-permission', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('permissions-manager/assign-auth', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+  ('system/log', 2, UNIX_TIMESTAMP(), UNIX_TIMESTAMP());
+
+INSERT IGNORE INTO `auth_item_child` (`parent`, `child`)
+  SELECT 'admin', `name` FROM `auth_item` WHERE `type` = 2;
+
+INSERT IGNORE INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
+  ('admin', '1', UNIX_TIMESTAMP());
 
 -- ---------- 后台操作日志（以 common/models/AdminLog.php 为准）----------
 CREATE TABLE IF NOT EXISTS `admin_log` (
